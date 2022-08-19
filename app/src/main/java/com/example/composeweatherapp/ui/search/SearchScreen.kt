@@ -1,6 +1,5 @@
 package com.example.composeweatherapp.ui.search
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,12 +10,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -40,9 +37,9 @@ fun SearchScreen(
     ) {
 
         var searchText by remember { mutableStateOf(TextFieldValue("")) }
-        var showLoadingAnim by rememberSaveable { mutableStateOf(false) }
-        var resultList: List<CitiesItem>? by rememberSaveable { mutableStateOf(null) }
-        var errorToast: String? by rememberSaveable { mutableStateOf("") }
+        var showLoadingAnim by remember { mutableStateOf(false) }
+        var resultList: List<CitiesItem>? by remember { mutableStateOf(null) }
+
         SearchView(
             searchText = searchText,
             Modifier
@@ -56,9 +53,6 @@ fun SearchScreen(
         if (showLoadingAnim) {
             LoadingLottieView()
         }
-        if (errorToast != ""){
-            Toast.makeText(LocalContext.current, errorToast, Toast.LENGTH_LONG).show()
-        }
         if (resultList != null) {
             ResultList(cities = resultList!!, onNavigateToPrimaryWeather)
         }
@@ -71,16 +65,14 @@ fun SearchScreen(
                     when (it) {
                         ResultWrapper.Loading -> {
                             showLoadingAnim = true
-                            errorToast = ""
                         }
                         is ResultWrapper.Success -> {
                             showLoadingAnim = false
-                            errorToast = ""
                             resultList = it.value
                         }
                         is ResultWrapper.Error -> {
                             showLoadingAnim = false
-                            errorToast = it.message
+                            //Toast.makeText(LocalContext.current, it.message, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -123,12 +115,14 @@ fun WelcomeLottieView() {
 }
 
 
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ResultList(cities: List<CitiesItem>, onClick: () -> Unit) {
     LazyColumn {
         items(cities) {
             Surface(onClick = onClick) {
+
 
                 Row(
                     modifier = Modifier
@@ -139,7 +133,7 @@ fun ResultList(cities: List<CitiesItem>, onClick: () -> Unit) {
 
 
                 ) {
-                    Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp), horizontalAlignment = Alignment.Start) {
+                    Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.Start) {
                         Text(text = it.name, fontSize = 24.sp, color = Color.White)
                         Text(text = it.state + ", " + it.country, fontSize = 24.sp, color = Color.White)
                     }
