@@ -1,5 +1,6 @@
 package com.example.composeweatherapp.ui.search
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,10 +11,12 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -37,9 +40,9 @@ fun SearchScreen(
     ) {
 
         var searchText by remember { mutableStateOf(TextFieldValue("")) }
-        var showLoadingAnim by remember { mutableStateOf(false) }
-        var resultList: List<CitiesItem>? by remember { mutableStateOf(null) }
-
+        var showLoadingAnim by rememberSaveable { mutableStateOf(false) }
+        var resultList: List<CitiesItem>? by rememberSaveable { mutableStateOf(null) }
+        var errorText: String? by rememberSaveable { mutableStateOf("") }
         SearchView(
             searchText = searchText,
             Modifier
@@ -53,6 +56,9 @@ fun SearchScreen(
         if (showLoadingAnim) {
             LoadingLottieView()
         }
+        if (errorText != "") {
+            Toast.makeText(LocalContext.current, errorText, Toast.LENGTH_LONG).show()
+        }
         if (resultList != null) {
             ResultList(cities = resultList!!, onNavigateToPrimaryWeather)
         }
@@ -65,14 +71,17 @@ fun SearchScreen(
                     when (it) {
                         ResultWrapper.Loading -> {
                             showLoadingAnim = true
+                            resultList = null
+                            errorText = ""
                         }
                         is ResultWrapper.Success -> {
                             showLoadingAnim = false
+                            errorText = ""
                             resultList = it.value
                         }
                         is ResultWrapper.Error -> {
                             showLoadingAnim = false
-                            //Toast.makeText(LocalContext.current, it.message, Toast.LENGTH_LONG).show()
+                            errorText = it.message
                         }
                     }
                 }
@@ -113,7 +122,6 @@ fun WelcomeLottieView() {
         modifier = Modifier.size(300.dp)
     )
 }
-
 
 
 @OptIn(ExperimentalMaterialApi::class)
