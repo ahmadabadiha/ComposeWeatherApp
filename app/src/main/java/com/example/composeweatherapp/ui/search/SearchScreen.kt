@@ -3,6 +3,7 @@ package com.example.composeweatherapp.ui.search
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,61 +29,69 @@ import com.example.composeweatherapp.LoadingLottieView
 import com.example.composeweatherapp.R
 import com.example.composeweatherapp.data.model.CitiesItem
 import com.example.composeweatherapp.data.remote.ResultWrapper
+import com.example.composeweatherapp.ui.theme.LightBlue
+import com.example.composeweatherapp.ui.theme.LighterBlue
+import com.example.composeweatherapp.ui.theme.Purple500
+import com.example.composeweatherapp.ui.theme.Purple700
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SearchScreen(
-    onNavigateToPrimaryWeather: () -> Unit,
-    searchViewModel: SearchViewModel = viewModel()
+    searchViewModel: SearchViewModel = viewModel(),
+    onNavigateToPrimaryWeather: (Float, Float, String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        var searchText by remember { mutableStateOf(TextFieldValue("")) }
-        var showLoadingAnim by rememberSaveable { mutableStateOf(false) }
-        var resultList: List<CitiesItem>? by rememberSaveable { mutableStateOf(null) }
-        var errorText: String? by rememberSaveable { mutableStateOf("") }
+        var searchTextState by remember { mutableStateOf(TextFieldValue("")) }
+        var showLoadingAnimState by rememberSaveable { mutableStateOf(false) }
+        var resultListState: List<CitiesItem>? by rememberSaveable { mutableStateOf(null) }
+        var errorTextState: String? by rememberSaveable { mutableStateOf("") }
         SearchView(
-            searchText = searchText,
+            searchText = searchTextState,
             Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
                 .background(Color(0xFFE7F1F1), RoundedCornerShape(16.dp))
         ) {
-            searchText = it
+            searchTextState = it
         }
 
-        if (showLoadingAnim) {
+        if (showLoadingAnimState) {
             LoadingLottieView()
         }
-        if (errorText != "") {
-            Toast.makeText(LocalContext.current, errorText, Toast.LENGTH_LONG).show()
+        if (errorTextState != "") {
+            Toast.makeText(LocalContext.current, errorTextState, Toast.LENGTH_LONG).show()
         }
-        if (resultList != null) {
-            ResultList(cities = resultList!!, onNavigateToPrimaryWeather)
+        if (resultListState != null) {
+            ResultList(cities = resultListState!!, onNavigateToPrimaryWeather)
         }
-        if (searchText.text == "") {
+        if (searchTextState.text == "") {
             WelcomeLottieView()
         } else {
-            LaunchedEffect(key1 = searchText.text) {
-                searchViewModel.searchCities(searchText.text)
+            LaunchedEffect(key1 = searchTextState.text) {
+                delay(1200)
+                searchViewModel.searchCities(searchTextState.text)
+            }
+            LaunchedEffect(key1 = true) {
                 searchViewModel.searchResults.collectLatest {
                     when (it) {
                         ResultWrapper.Loading -> {
-                            showLoadingAnim = true
-                            resultList = null
-                            errorText = ""
+                            showLoadingAnimState = true
+                            resultListState = null
+                            errorTextState = ""
                         }
                         is ResultWrapper.Success -> {
-                            showLoadingAnim = false
-                            errorText = ""
-                            resultList = it.value
+                            showLoadingAnimState = false
+                            errorTextState = ""
+                            resultListState = it.value
                         }
                         is ResultWrapper.Error -> {
-                            showLoadingAnim = false
-                            errorText = it.message
+                            showLoadingAnimState = false
+                            errorTextState = it.message
                         }
                     }
                 }
@@ -115,38 +125,37 @@ fun SearchView(
 
 @Composable
 fun WelcomeLottieView() {
-    Spacer(modifier = Modifier.height(104.dp))
-    val animationSpec by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.location_weather_radar))
-    LottieAnimation(
-        animationSpec,
-        modifier = Modifier.size(300.dp)
-    )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(104.dp))
+        val animationSpec by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.location_weather_radar))
+        LottieAnimation(
+            animationSpec,
+            modifier = Modifier.size(300.dp)
+        )
+        Text(text = "Search any place in the world", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Purple700)
+    }
 }
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ResultList(cities: List<CitiesItem>, onClick: () -> Unit) {
+fun ResultList(cities: List<CitiesItem>, onClick: (Float, Float, String) -> Unit) {
     LazyColumn {
         items(cities) {
-            Surface(onClick = onClick) {
-
-
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .border(width = 4.dp, color = Color.White, RoundedCornerShape(48.dp))
-                        .background(Brush.horizontalGradient(colors = listOf(Color.Blue, Color.White)), RoundedCornerShape(48.dp))
-
-
-                ) {
-                    Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.Start) {
-                        Text(text = it.name, fontSize = 24.sp, color = Color.White)
-                        Text(text = it.state + ", " + it.country, fontSize = 24.sp, color = Color.White)
-                    }
+            Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .border(width = 4.dp, color = Color.White, RoundedCornerShape(48.dp))
+                    .background(Brush.horizontalGradient(colors = listOf(LightBlue, Color.White)), RoundedCornerShape(48.dp))
+                    .clickable { onClick(it.lat.toFloat(), it.lon.toFloat(), it.name) }
+            ) {
+                Column(modifier = Modifier.padding(12.dp).offset(x = 4.dp), horizontalAlignment = Alignment.Start) {
+                    Text(text = it.name, fontSize = 24.sp, color = Color.White)
+                    Text(text = it.state + ", " + it.country, fontSize = 24.sp, color = Color.White)
                 }
             }
+
         }
     }
 }

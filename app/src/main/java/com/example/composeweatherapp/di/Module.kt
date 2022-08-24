@@ -8,6 +8,7 @@ import com.example.composeweatherapp.domain.usecases.SearchCityUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,14 +24,6 @@ object Module {
     @Singleton
     @Provides
     fun provideRetrofitDataSource(weatherService: WeatherService): RemoteDataSource = RetrofitDataSource(weatherService)
-
-    @Singleton
-    @Provides
-    fun provideRepository(remoteDataSource: RemoteDataSource): Repository = Repository(remoteDataSource)
-
-    @Singleton
-    @Provides
-    fun provideSearchCityUseCase(repository: Repository) = SearchCityUseCase(repository)
 
     @Singleton
     @Provides

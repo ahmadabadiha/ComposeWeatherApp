@@ -2,6 +2,7 @@ package com.example.composeweatherapp
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,8 @@ fun convertToTempString(temp: Double): String{
     return "$temp°"
 }
 
+val textModifierWithPadding4 = Modifier.padding(4.dp)
+val textModifierWithPadding8 = Modifier.padding(8.dp)
 @Composable
 fun LoadingLottieView() {
     Spacer(modifier = Modifier.height(120.dp))
