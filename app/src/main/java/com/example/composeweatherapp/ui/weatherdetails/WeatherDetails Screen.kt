@@ -1,20 +1,20 @@
 package com.example.composeweatherapp.ui.weatherdetails
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,7 +50,7 @@ fun PageTitleWithCoordinates(lat: Float, lon: Float, cityName: String) {
     ) {
         Row(horizontalArrangement = Arrangement.Center, verticalAlignment = CenterVertically) {
             Icon(painter = painterResource(id = R.drawable.ic_round_location_city_24), null, tint = Color.Black)
-            Text(modifier = textModifierWithPadding4, text = cityName, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(modifier = textModifierWithPadding4, text = cityName, fontSize = 24.sp, fontWeight = Bold, color = Color.Black)
         }
         Text(
             modifier = textModifierWithPadding4.align(CenterHorizontally),

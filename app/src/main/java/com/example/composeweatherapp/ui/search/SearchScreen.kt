@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -24,14 +24,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.airbnb.lottie.compose.*
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.composeweatherapp.LoadingLottieView
 import com.example.composeweatherapp.R
 import com.example.composeweatherapp.data.model.CitiesItem
 import com.example.composeweatherapp.data.remote.ResultWrapper
 import com.example.composeweatherapp.ui.theme.LightBlue
-import com.example.composeweatherapp.ui.theme.LighterBlue
-import com.example.composeweatherapp.ui.theme.Purple500
 import com.example.composeweatherapp.ui.theme.Purple700
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -137,7 +137,6 @@ fun WelcomeLottieView() {
 }
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ResultList(cities: List<CitiesItem>, onClick: (Float, Float, String) -> Unit) {
     LazyColumn {

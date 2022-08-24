@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -33,7 +34,6 @@ import com.example.composeweatherapp.ui.sharedviewmodel.SharedViewModel
 import com.example.composeweatherapp.ui.theme.LightBlue
 import com.example.composeweatherapp.ui.theme.LighterBlue
 import com.example.composeweatherapp.ui.theme.Purple200
-import com.example.composeweatherapp.ui.theme.Teal200
 import kotlinx.coroutines.flow.collectLatest
 
 
