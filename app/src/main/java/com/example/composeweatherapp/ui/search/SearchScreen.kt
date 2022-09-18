@@ -154,7 +154,6 @@ fun ResultList(cities: List<CitiesItem>, onClick: (Float, Float, String) -> Unit
                     Text(text = it.state + ", " + it.country, fontSize = 24.sp, color = Color.White)
                 }
             }
-
         }
     }
 }

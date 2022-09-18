@@ -3,12 +3,9 @@ package com.example.composeweatherapp.di
 import com.example.composeweatherapp.data.remote.RemoteDataSource
 import com.example.composeweatherapp.data.remote.RetrofitDataSource
 import com.example.composeweatherapp.data.remote.WeatherService
-import com.example.composeweatherapp.domain.repository.Repository
-import com.example.composeweatherapp.domain.usecases.SearchCityUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -116,7 +116,7 @@ fun CurrentWeather(currentWeather: Current, onNavigateToWeatherDetails: () -> Un
             .padding(8.dp)
             .background(
                 Brush.linearGradient(
-                    listOf(Purple200, Color.Blue), start = Offset(0f, 0f),
+                    listOf(Purple200, Color.Cyan), start = Offset(0f, 0f),
                     end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
                 ), RoundedCornerShape(24.dp)
             )
